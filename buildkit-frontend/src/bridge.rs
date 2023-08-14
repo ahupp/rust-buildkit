@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use failure::{bail, format_err, Error, ResultExt};
+use anyhow::{anyhow, bail, Context, Result};
 use log::*;
 use tokio::sync::Mutex;
 
@@ -41,7 +41,7 @@ impl Bridge {
         &self,
         image: &ImageSource,
         log: Option<&str>,
-    ) -> Result<(String, ImageSpecification), Error> {
+    ) -> Result<(String, ImageSpecification)> {
         let request = ResolveImageConfigRequest {
             r#ref: image.canonical_name(),
             platform: None,
@@ -67,7 +67,7 @@ impl Bridge {
         ))
     }
 
-    pub async fn solve<'a, 'b: 'a>(&'a self, graph: Terminal<'b>) -> Result<OutputRef, Error> {
+    pub async fn solve<'a, 'b: 'a>(&'a self, graph: Terminal<'b>) -> Result<OutputRef> {
         self.solve_with_cache(graph, &[]).await
     }
 
@@ -75,7 +75,7 @@ impl Bridge {
         &'a self,
         graph: Terminal<'b>,
         cache: &[CacheOptionsEntry],
-    ) -> Result<OutputRef, Error> {
+    ) -> Result<OutputRef> {
         debug!("serializing a graph to request");
         let request = SolveRequest {
             definition: Some(graph.into_definition()),
@@ -97,7 +97,7 @@ impl Bridge {
                 .context("Unable to solve the graph")?
                 .into_inner()
                 .result
-                .ok_or_else(|| format_err!("Unable to extract solve result"))?
+                .ok_or_else(|| anyhow!("Unable to extract solve result"))?
         };
 
         debug!("got response: {:#?}", response);
@@ -105,7 +105,7 @@ impl Bridge {
         let inner = {
             response
                 .result
-                .ok_or_else(|| format_err!("Unable to extract solve result"))?
+                .ok_or_else(|| anyhow!("Unable to extract solve result"))?
         };
 
         match inner {
@@ -119,7 +119,7 @@ impl Bridge {
         layer: &'b OutputRef,
         path: P,
         range: Option<FileRange>,
-    ) -> Result<Vec<u8>, Error>
+    ) -> Result<Vec<u8>>
     where
         P: Into<PathBuf>,
     {
@@ -150,7 +150,7 @@ impl Bridge {
         self,
         output: OutputRef,
         config: Option<ImageSpecification>,
-    ) -> Result<(), Error> {
+    ) -> Result<()> {
         let mut metadata = HashMap::new();
 
         if let Some(config) = config {
@@ -176,7 +176,7 @@ impl Bridge {
         Ok(())
     }
 
-    pub(crate) async fn finish_with_error<S>(self, code: ErrorCode, message: S) -> Result<(), Error>
+    pub(crate) async fn finish_with_error<S>(self, code: ErrorCode, message: S) -> Result<()>
     where
         S: Into<String>,
     {

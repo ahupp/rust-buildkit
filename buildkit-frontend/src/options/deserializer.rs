@@ -1,12 +1,12 @@
 use std::io::Cursor;
 use std::iter::empty;
 
-use failure::Error;
+use anyhow::Result;
 use serde::de::value::{MapDeserializer, SeqDeserializer};
 use serde::de::{self, DeserializeOwned, IntoDeserializer, Visitor};
 use serde::forward_to_deserialize_any;
 
-pub fn from_env<T, I>(pairs: I) -> Result<T, Error>
+pub fn from_env<T, I>(pairs: I) -> Result<T>
 where
     T: DeserializeOwned,
     I: IntoIterator<Item = (String, String)>,
@@ -26,7 +26,7 @@ where
         vals: pairs.map(|value| extract_name_and_value(&value)),
     };
 
-    T::deserialize(deserializer).map_err(Error::from)
+    T::deserialize(deserializer).map_err(|e| e.into())
 }
 
 #[derive(Debug)]

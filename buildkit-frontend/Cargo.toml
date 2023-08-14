@@ -14,9 +14,10 @@ keywords = ["buildkit", "docker", "bridge"]
 
 
 [dependencies]
-bytes = "0.5"
-either = "1.5"
 failure = "0.1"
+anyhow = "1"
+bytes = "1"
+either = "1"
 futures = "0.3"
 libc = "0.2"
 log = "0.4"
