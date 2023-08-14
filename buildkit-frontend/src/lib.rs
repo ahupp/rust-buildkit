@@ -57,9 +57,10 @@ where
     F: Frontend<O>,
     O: DeserializeOwned,
 {
+    let service = service_fn(stdio_connector);
     let channel = {
         Endpoint::from_static("http://[::]:50051")
-            .connect_with_connector(service_fn(stdio_connector))
+            .connect_with_connector(service)
             .await?
     };
 
