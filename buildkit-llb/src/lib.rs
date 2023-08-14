@@ -1,4 +1,5 @@
 #![deny(warnings)]
+#![allow(dead_code)]
 #![deny(clippy::all)]
 
 // FIXME: get rid of the unwraps
