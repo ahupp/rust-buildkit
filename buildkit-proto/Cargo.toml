@@ -1,16 +1,18 @@
 [package]
 name = "buildkit-proto"
-version = "0.2.0"
-authors = ["Denys Zariaiev <denys.zariaiev@gmail.com>"]
-edition = "2018"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+repository.workspace = true
+license.workspace = true
+categories.workspace = true
 
 description = "Protobuf interfaces to BuildKit"
 documentation = "https://docs.rs/buildkit-proto"
-repository = "https://github.com/denzp/rust-buildkit"
+
 readme = "README.md"
 keywords = ["buildkit", "docker", "protobuf", "prost"]
-categories = ["development-tools::build-utils", "api-bindings"]
-license = "MIT/Apache-2.0"
+
 
 [dependencies]
 prost = "0.6"
