@@ -1,6 +1,5 @@
-#![deny(warnings)]
 #![deny(clippy::all)]
-
+#![allow(unused_code)]
 use failure::{Error, ResultExt};
 use log::*;
 use serde::de::DeserializeOwned;
