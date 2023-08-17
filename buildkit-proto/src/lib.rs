@@ -4,15 +4,15 @@ pub mod moby {
     pub mod buildkit {
         pub mod v1 {
             pub mod frontend {
-                include!(concat!(env!("OUT_DIR"), "/moby.buildkit.v1.frontend.rs"));
+                tonic::include_proto!("moby.buildkit.v1.frontend");
             }
 
             pub mod apicaps {
-                include!(concat!(env!("OUT_DIR"), "/moby.buildkit.v1.apicaps.rs"));
+                tonic::include_proto!("moby.buildkit.v1.apicaps");
             }
 
             pub mod types {
-                include!(concat!(env!("OUT_DIR"), "/moby.buildkit.v1.types.rs"));
+                tonic::include_proto!("moby.buildkit.v1.types");
             }
         }
     }
@@ -20,16 +20,16 @@ pub mod moby {
 
 pub mod google {
     pub mod rpc {
-        include!(concat!(env!("OUT_DIR"), "/google.rpc.rs"));
+        tonic::include_proto!("google.rpc");
     }
 }
 
 pub mod pb {
-    include!(concat!(env!("OUT_DIR"), "/pb.rs"));
+    tonic::include_proto!("pb");
 }
 
 pub mod fsutil {
     pub mod types {
-        include!(concat!(env!("OUT_DIR"), "/fsutil.types.rs"));
+        tonic::include_proto!("fsutil.types");
     }
 }
